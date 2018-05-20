@@ -8,7 +8,7 @@ namespace maps {
 template <typename T, typename CostFunction>
 class PointNode : public Node<T> {
  public:
-  PointNode(const T&, const T&);
+  PointNode(int, const T&, const T&);
   PointNode(const PointNode&) = default;
   PointNode(PointNode&&) noexcept = default;
   PointNode& operator=(const PointNode&) = default;
@@ -28,7 +28,8 @@ template <typename T, typename CostFunction>
 CostFunction PointNode<T, CostFunction>::cost_function_;
 
 template <typename T, typename CostFunction>
-PointNode<T, CostFunction>::PointNode(const T &x, const T &y) :
+PointNode<T, CostFunction>::PointNode(int id, const T &x, const T &y) :
+    Node<T>(id),
     x_(x),
     y_(y) {
 };
