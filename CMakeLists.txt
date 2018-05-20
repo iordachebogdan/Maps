@@ -3,4 +3,4 @@ project(Maps)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Maps main.cpp)
+add_executable(Maps edge.h main.cc undirected_edge.h node.h directed_edge.h point_node.h euclidian_distance.h)
