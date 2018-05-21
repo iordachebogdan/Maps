@@ -18,6 +18,8 @@ class CompleteGraph : public UndirectedGraph<T> {
 
   T get_distance(int, int) const override;
 
+  static bool recognize(int, const std::vector<EdgePtr>&);
+
  private:
   std::vector<std::vector<T>> distance_;
 };
@@ -38,6 +40,26 @@ CompleteGraph<T>::CompleteGraph(int node_count,
 template <typename T>
 T CompleteGraph<T>::get_distance(int id_source, int id_destination) const {
   return distance_[id_source][id_destination];
+}
+
+template <typename T>
+bool CompleteGraph<T>::recognize(int node_count,
+                                 const std::vector<EdgePtr> &edges) {
+  for (auto&& it : edges)
+    if (it->is_directed())
+      return false;
+  std::vector< std::vector<bool> > has_edge(static_cast<size_t>(node_count),
+    std::vector<bool>(static_cast<size_t>(node_count, false)));
+  for (auto&& it : edges) {
+    UndirectedEdge<T>* edge = dynamic_cast<UndirectedEdge<T>*>(it);
+    has_edge[edge->get_first()->get_id()][edge->get_second()->get_id()] = true;
+    has_edge[edge->get_second()->get_id()][edge->get_first()->get_id()] = true;
+  }
+  for (int first = 0; first < node_count; ++first)
+    for (int second = 0; second < node_count; ++second)
+      if (first != second && !has_edge[first][second])
+        return false;
+  return true;
 }
 
 }

@@ -19,12 +19,14 @@ class DirectedGraph : public Graph<T> {
   bool is_directed() const override;
   T get_distance(int, int) const override;
 
+  static bool recognize(int, const std::vector<Edge<T>*>&);
  protected:
   int node_count_;
   std::vector< DirectedEdge<T> > edges_;
   std::vector< std::vector< DirectedEdge<T>* > > adj_list_;
 
   void build_adj_list_();
+
  private:
   class HeapComp {
    public:
@@ -35,9 +37,6 @@ class DirectedGraph : public Graph<T> {
 template <typename T>
 DirectedGraph<T>::DirectedGraph(int node_count, const std::vector<Edge<T>*> &edges) :
     node_count_(node_count) {
-  for (auto&& it : edges)
-    if (!it->is_directed())
-      throw "edges don't match graph type";
   edges_.reserve(edges.size());
   for (auto&& it : edges)
     edges_.push_back(*dynamic_cast<DirectedEdge<T>*>(it));
@@ -115,6 +114,15 @@ void DirectedGraph<T>::build_adj_list_() {
                    std::vector<DirectedEdge<T>*>());
   for (auto& it : edges_)
     adj_list_[it.get_from()->get_id()].push_back(&it);
+}
+
+template <typename T>
+bool DirectedGraph<T>::recognize(int node_count,
+                                 const std::vector<Edge<T>*> &edges) {
+  for (auto&& it : edges)
+    if (!it->is_directed())
+      return false;
+  return true;
 }
 
 }

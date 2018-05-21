@@ -23,7 +23,7 @@ int main() {
       new maps::UndirectedEdge<int>(&a4, &a3)
   };
 
-  maps::Graph<int>* g = maps::GraphFactory<int>::create_graph(maps::BasicUndirected, 4, edges);
+  maps::Graph<int>* g = maps::GraphFactory<int>::create_graph(4, edges);
   std::cerr << g->get_distance(0, 2) << std::endl;
 
 

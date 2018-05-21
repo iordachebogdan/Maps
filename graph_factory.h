@@ -18,20 +18,37 @@ enum GraphTypes {
   DAG,
   Complete,
   BasicDirected,
-  BasicUndirected
+  BasicUndirected,
+  Undefined
 };
 
 template <typename T>
 class GraphFactory {
   typedef Edge<T>* EdgePtr;
  public:
-  static Graph<T>* create_graph(GraphTypes, int, const std::vector< EdgePtr >&);
+  static Graph<T>* create_graph(int, const std::vector< EdgePtr >&);
 };
 
 template <typename T>
-Graph<T>* GraphFactory<T>::create_graph(GraphTypes type,
-                                        int node_count,
+Graph<T>* GraphFactory<T>::create_graph(int node_count,
                                         const std::vector<EdgePtr> &edges) {
+  GraphTypes type = Undefined;
+  if (DirectedGraph<T>::recognize(node_count, edges)) {
+    type = BasicDirected;
+    if (DAGraph<T>::recognize(node_count, edges))
+      type = DAG;
+  }
+  if (UndirectedGraph<T>::recognize(node_count, edges)) {
+    type = BasicUndirected;
+    if (CompleteGraph<T>::recognize(node_count, edges))
+      type = Complete;
+    if (TreeGraph<T>::recognize(node_count, edges)) {
+      type = Tree;
+      if (LineGraph<T>::recognize(node_count, edges))
+        type = Line;
+    }
+  }
+
   if (type == BasicDirected) {
     return new DirectedGraph<T>(node_count, edges);
   }
@@ -50,7 +67,7 @@ Graph<T>* GraphFactory<T>::create_graph(GraphTypes type,
   else if (type == Line) {
     return new LineGraph<T>(node_count, edges);
   }
-  return nullptr;
+  throw "nonexisting graph type";
 }
 
 }

@@ -2,6 +2,7 @@
 #define MAPS_DAGRAPH_H
 
 #include "directed_graph.h"
+#include <functional>
 
 namespace maps {
 
@@ -17,6 +18,8 @@ class DAGraph : public DirectedGraph<T> {
   virtual ~DAGraph() = default;
 
   T get_distance(int, int) const override;
+
+  static bool recognize(int, const std::vector<EdgePtr>&);
 
  private:
   std::vector<int> top_sort_;
@@ -74,6 +77,40 @@ void DAGraph<T>::get_top_sort(int node, std::vector<bool>& visited) {
     get_top_sort(nxt, visited);
   }
   top_sort_.push_back(node);
+}
+
+template <typename T>
+bool DAGraph<T>::recognize(int node_count, const std::vector<EdgePtr> &edges) {
+  for (auto&& it : edges)
+    if (!it->is_directed())
+      return false;
+  std::vector< std::vector<int> > adj(static_cast<size_t>(node_count));
+  for (auto&& it : edges) {
+    DirectedEdge<T>* edge = dynamic_cast<DirectedEdge<T>*>(it);
+    adj[edge->get_from()->get_id()].push_back(edge->get_to()->get_id());
+  }
+
+  std::vector< bool > visited(static_cast<size_t>(node_count));
+  std::vector< bool > on_stack(static_cast<size_t>(node_count));
+  std::function<bool(int)> dfs = [&](int node) -> bool {
+    if (!visited[node]) {
+      visited[node] = true;
+      on_stack[node] = true;
+      for (auto&& it : adj[node]) {
+        if (!visited[it] && dfs(it))
+          return true;
+        else if (on_stack[it])
+          return true;
+      }
+    }
+    on_stack[node] = false;
+    return false;
+  };
+
+  for (int i = 0; i < node_count; ++i)
+    if (dfs(i))
+      return false;
+  return true;
 }
 
 }

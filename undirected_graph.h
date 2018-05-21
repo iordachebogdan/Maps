@@ -19,6 +19,7 @@ class UndirectedGraph : public Graph<T> {
   bool is_directed() const override;
   T get_distance(int, int) const override;
 
+  static bool recognize(int, const std::vector<Edge<T>*>&);
  protected:
   int node_count_;
   std::vector<UndirectedEdge<T>> edges_;
@@ -36,9 +37,6 @@ template <typename T>
 UndirectedGraph<T>::UndirectedGraph(int node_count,
                                     const std::vector<Edge<T> *>& edges) :
     node_count_(node_count) {
-  for (auto&& it : edges)
-    if (it->is_directed())
-      throw "edges don't match graph type";
   edges_.reserve(edges.size());
   for (auto&& it : edges) {
     edges_.push_back(*dynamic_cast<UndirectedEdge<T>*>(it));
@@ -121,6 +119,15 @@ void UndirectedGraph<T>::build_adj_list_() {
     adj_list_[it.get_first()->get_id()].push_back(&it);
     adj_list_[it.get_second()->get_id()].push_back(&it);
   }
+}
+
+template <typename T>
+bool UndirectedGraph<T>::recognize(int node_count,
+                                   const std::vector<Edge<T>*> &edges) {
+  for (auto&& it : edges)
+    if (it->is_directed())
+      return false;
+  return true;
 }
 
 }

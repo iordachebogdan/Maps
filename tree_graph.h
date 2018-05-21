@@ -2,6 +2,7 @@
 #define MAPS_TREE_GRAPH_H
 
 #include "undirected_graph.h"
+#include <functional>
 
 namespace maps {
 
@@ -17,6 +18,8 @@ class TreeGraph : public UndirectedGraph<T> {
   virtual ~TreeGraph() = default;
 
   T get_distance(int, int) const override;
+
+  static bool recognize(int, const std::vector<EdgePtr>&);
 
  private:
   std::vector< int > level_;
@@ -98,6 +101,35 @@ int TreeGraph<T>::lca(int first, int second) const {
       second = ancestors_[i][second];
     }
   return ancestors_[0][first];
+}
+
+template <typename T>
+bool TreeGraph<T>::recognize(int node_count, const std::vector<EdgePtr> &edges){
+  if (node_count - 1 != static_cast<int>(edges.size()))
+    return false;
+  for (auto&& it : edges)
+    if (it->is_directed())
+      return false;
+  std::vector< std::vector<int> > adj(static_cast<size_t>(node_count));
+  for (auto&& it : edges) {
+    UndirectedEdge<T>* edge = dynamic_cast<UndirectedEdge<T>*>(it);
+    adj[edge->get_first()->get_id()].push_back(edge->get_second()->get_id());
+    adj[edge->get_second()->get_id()].push_back(edge->get_first()->get_id());
+  }
+
+  std::vector<bool> visited(static_cast<size_t>(node_count));
+  std::function<void(int)> dfs = [&](int node) {
+    visited[node] = true;
+    for (auto&& it : adj[node])
+      if (!visited[it])
+        dfs(it);
+  };
+
+  dfs(0);
+  for (int i = 0; i < node_count; ++i)
+    if (!visited[i])
+      return false;
+  return true;
 }
 
 }
