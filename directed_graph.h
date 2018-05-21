@@ -52,7 +52,7 @@ DirectedGraph<T>::DirectedGraph(const DirectedGraph &rhs) :
 }
 
 template <typename T>
-DirectedGraph& DirectedGraph<T>::operator=(const DirectedGraph &rhs) {
+DirectedGraph<T>& DirectedGraph<T>::operator=(const DirectedGraph &rhs) {
   if (this != &rhs) {
     node_count_ = rhs.node_count_;
     edges_ = rhs.edges_;

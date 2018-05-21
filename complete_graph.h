@@ -7,8 +7,9 @@ namespace maps {
 
 template <typename T>
 class CompleteGraph : public UndirectedGraph<T> {
+  typedef Edge<T>* EdgePtr;
  public:
-  explicit CompleteGraph(int, const std::vector<Edge<T>*>&);
+  explicit CompleteGraph(int, const std::vector<EdgePtr>&);
   CompleteGraph(const CompleteGraph&) = default;
   CompleteGraph(CompleteGraph&&) noexcept = default;
   CompleteGraph& operator=(const CompleteGraph&) = default;
@@ -23,14 +24,15 @@ class CompleteGraph : public UndirectedGraph<T> {
 
 template <typename T>
 CompleteGraph<T>::CompleteGraph(int node_count,
-                                const std::vector<Edge<T>*>& edges) :
+                                const std::vector<EdgePtr>& edges) :
     UndirectedGraph<T>(node_count, edges) {
-  distance_.resize(static_cast<size_t>(node_count_),
-    std::vector<T>(static_cast<size_t>(node_count_)));
-  adj_list_.clear();
-  for (auto&& it : edges_)
-    distance_[it.get_first()][it.get_second()] = it.get_weight();
-  edges_.clear();
+  distance_.resize(static_cast<size_t>(this->node_count_),
+    std::vector<T>(static_cast<size_t>(this->node_count_)));
+  this->adj_list_.clear();
+  for (auto&& it : this->edges_)
+    distance_[it.get_first()->get_id()][it.get_second()->get_id()] =
+        it.get_weight();
+  this->edges_.clear();
 }
 
 template <typename T>

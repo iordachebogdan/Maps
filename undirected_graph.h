@@ -54,7 +54,7 @@ UndirectedGraph<T>::UndirectedGraph(const UndirectedGraph &rhs) :
 }
 
 template <typename T>
-UndirectedGraph& UndirectedGraph<T>::operator=(const UndirectedGraph &rhs) {
+UndirectedGraph<T>& UndirectedGraph<T>::operator=(const UndirectedGraph &rhs) {
   if (&rhs != this) {
     node_count_ = rhs.node_count_;
     edges_ = rhs.edges_;

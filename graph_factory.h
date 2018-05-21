@@ -3,7 +3,9 @@
 
 #include "graph.h"
 #include "directed_graph.h"
+#include "complete_graph.h"
 #include "edge.h"
+#include "da_graph.h"
 #include <vector>
 
 namespace maps {
@@ -33,6 +35,12 @@ Graph<T>* GraphFactory<T>::create_graph(GraphTypes type,
   }
   else if (type == BasicUndirected) {
     return new UndirectedGraph<T>(node_count, edges);
+  }
+  else if (type == Complete) {
+    return new CompleteGraph<T>(node_count, edges);
+  }
+  else if (type == DAG) {
+    return new DAGraph<T>(node_count, edges);
   }
   return nullptr;
 }
