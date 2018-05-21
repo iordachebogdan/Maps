@@ -7,6 +7,8 @@
 #include "edge.h"
 #include "da_graph.h"
 #include <vector>
+#include "tree_graph.h"
+#include "line_graph.h"
 
 namespace maps {
 
@@ -41,6 +43,12 @@ Graph<T>* GraphFactory<T>::create_graph(GraphTypes type,
   }
   else if (type == DAG) {
     return new DAGraph<T>(node_count, edges);
+  }
+  else if (type == Tree) {
+    return new TreeGraph<T>(node_count, edges);
+  }
+  else if (type == Line) {
+    return new LineGraph<T>(node_count, edges);
   }
   return nullptr;
 }
