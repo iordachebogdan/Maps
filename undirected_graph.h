@@ -12,23 +12,24 @@ template <typename T>
 class UndirectedGraph : public Graph<T> {
  public:
   explicit UndirectedGraph(int, const std::vector<Edge<T>*>&);
-  UndirectedGraph(const UndirectedGraph&) = default;
-  UndirectedGraph(UndirectedGraph&&) noexcept = default;
-  UndirectedGraph& operator=(const UndirectedGraph&) = default;
-  UndirectedGraph& operator=(UndirectedGraph&&) noexcept = default;
+  UndirectedGraph(const UndirectedGraph&);
+  UndirectedGraph& operator=(const UndirectedGraph&);
   virtual ~UndirectedGraph() = default;
 
   bool is_directed() const override;
   T get_distance(int, int) const override;
+
+ protected:
+  int node_count_;
+  std::vector<UndirectedEdge<T>> edges_;
+  std::vector< std::vector< UndirectedEdge<T>* > > adj_list_;
+
+  void build_adj_list_();
  private:
   class HeapComp {
    public:
     bool operator()(const std::pair<T, int>&, const std::pair<T, int>&) const;
   };
-
-  int node_count_;
-  std::vector<UndirectedEdge<T>> edges_;
-  std::vector< std::vector< UndirectedEdge<T>* > > adj_list_;
 };
 
 template <typename T>
@@ -38,13 +39,28 @@ UndirectedGraph<T>::UndirectedGraph(int node_count,
   for (auto&& it : edges)
     if (it->is_directed())
       throw "edges don't match graph type";
-  adj_list_.resize(static_cast<size_t>(node_count_));
   edges_.reserve(edges.size());
   for (auto&& it : edges) {
     edges_.push_back(*dynamic_cast<UndirectedEdge<T>*>(it));
-    adj_list_[edges_.back().get_first()->get_id()].push_back(&edges_.back());
-    adj_list_[edges_.back().get_second()->get_id()].push_back(&edges_.back());
   }
+  build_adj_list_();
+}
+
+template <typename T>
+UndirectedGraph<T>::UndirectedGraph(const UndirectedGraph &rhs) :
+    node_count_(rhs.node_count_),
+    edges_(rhs.edges_) {
+  build_adj_list_();
+}
+
+template <typename T>
+UndirectedGraph& UndirectedGraph<T>::operator=(const UndirectedGraph &rhs) {
+  if (&rhs != this) {
+    node_count_ = rhs.node_count_;
+    edges_ = rhs.edges_;
+    build_adj_list_();
+  }
+  return *this;
 }
 
 template <typename T>
@@ -95,6 +111,16 @@ bool UndirectedGraph<T>::HeapComp::operator()(const std::pair<T, int> &first,
                                               const std::pair<T, int>
                                                 &second) const {
   return first.first > second.first;
+}
+
+template <typename T>
+void UndirectedGraph<T>::build_adj_list_() {
+  adj_list_.assign(static_cast<size_t>(node_count_),
+                   std::vector<UndirectedEdge<T>*>());
+  for (auto& it : edges_) {
+    adj_list_[it.get_first()->get_id()].push_back(&it);
+    adj_list_[it.get_second()->get_id()].push_back(&it);
+  }
 }
 
 }

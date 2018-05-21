@@ -12,23 +12,24 @@ template <typename T>
 class DirectedGraph : public Graph<T> {
  public:
   explicit DirectedGraph(int, const std::vector<Edge<T>*>&);
-  DirectedGraph(const DirectedGraph&) = default;
-  DirectedGraph(DirectedGraph&&) noexcept = default;
-  DirectedGraph& operator=(const DirectedGraph&) = default;
-  DirectedGraph& operator=(DirectedGraph&&) noexcept = default;
+  DirectedGraph(const DirectedGraph&);
+  DirectedGraph& operator=(const DirectedGraph&);
   virtual ~DirectedGraph() = default;
 
   bool is_directed() const override;
   T get_distance(int, int) const override;
+
+ protected:
+  int node_count_;
+  std::vector< DirectedEdge<T> > edges_;
+  std::vector< std::vector< DirectedEdge<T>* > > adj_list_;
+
+  void build_adj_list_();
  private:
   class HeapComp {
    public:
     bool operator()(const std::pair<T, int>&, const std::pair<T, int>&) const;
   };
-
-  int node_count_;
-  std::vector< DirectedEdge<T> > edges_;
-  std::vector< std::vector< DirectedEdge<T>* > > adj_list_;
 };
 
 template <typename T>
@@ -37,12 +38,27 @@ DirectedGraph<T>::DirectedGraph(int node_count, const std::vector<Edge<T>*> &edg
   for (auto&& it : edges)
     if (!it->is_directed())
       throw "edges don't match graph type";
-  adj_list_.resize(static_cast<size_t>(node_count));
   edges_.reserve(edges.size());
-  for (auto&& it : edges) {
+  for (auto&& it : edges)
     edges_.push_back(*dynamic_cast<DirectedEdge<T>*>(it));
-    adj_list_[edges_.back().get_from()->get_id()].push_back(&edges_.back());
+  build_adj_list_();
+}
+
+template <typename T>
+DirectedGraph<T>::DirectedGraph(const DirectedGraph &rhs) :
+    node_count_(rhs.node_count_),
+    edges_(rhs.edges_) {
+  build_adj_list_();
+}
+
+template <typename T>
+DirectedGraph& DirectedGraph<T>::operator=(const DirectedGraph &rhs) {
+  if (this != &rhs) {
+    node_count_ = rhs.node_count_;
+    edges_ = rhs.edges_;
+    build_adj_list_();
   }
+  return *this;
 }
 
 template <typename T>
@@ -91,6 +107,14 @@ bool DirectedGraph<T>::HeapComp::operator()(const std::pair<T, int> &first,
                                             const std::pair<T, int>
                                               &second) const {
   return first.first > second.first;
+}
+
+template <typename T>
+void DirectedGraph<T>::build_adj_list_() {
+  adj_list_.assign(static_cast<size_t>(node_count_),
+                   std::vector<DirectedEdge<T>*>());
+  for (auto& it : edges_)
+    adj_list_[it.get_from()->get_id()].push_back(&it);
 }
 
 }
