@@ -31,6 +31,9 @@ Graph<T>* GraphFactory<T>::create_graph(GraphTypes type,
   if (type == BasicDirected) {
     return new DirectedGraph<T>(node_count, edges);
   }
+  else if (type == BasicUndirected) {
+    return new UndirectedGraph<T>(node_count, edges);
+  }
   return nullptr;
 }
 

@@ -3,6 +3,7 @@
 #include "euclidian_distance.h"
 #include <iostream>
 #include "directed_graph.h"
+#include "undirected_graph.h"
 #include "graph_factory.h"
 
 int main() {
@@ -16,13 +17,13 @@ int main() {
 
   maps::PointNode<int, maps::EuclidianDistance<int>> a1(0, 0, 0), a2(1, 0, 2), a3(2, 2, 2), a4(3, 1, 1);
   std::vector< maps::Edge<int>* > edges = {
-      new maps::DirectedEdge<int>(&a1, &a2),
-      new maps::DirectedEdge<int>(&a2, &a3),
-      new maps::DirectedEdge<int>(&a1, &a4),
-      new maps::DirectedEdge<int>(&a4, &a3)
+      new maps::UndirectedEdge<int>(&a1, &a2),
+      new maps::UndirectedEdge<int>(&a2, &a3),
+      new maps::UndirectedEdge<int>(&a1, &a4),
+      new maps::UndirectedEdge<int>(&a4, &a3)
   };
 
-  maps::Graph<int>* g = maps::GraphFactory<int>::create_graph(maps::BasicDirected, 4, edges);
+  maps::Graph<int>* g = maps::GraphFactory<int>::create_graph(maps::BasicUndirected, 4, edges);
   std::cerr << g->get_distance(0, 2) << std::endl;
 
 

@@ -9,7 +9,7 @@ namespace maps {
 template <typename T>
 class UndirectedEdge : public Edge<T> {
  public:
-  UndirectedEdge(const Node*, const Node*);
+  UndirectedEdge(const Node<T>*, const Node<T>*);
   UndirectedEdge(const UndirectedEdge&) = default;
   UndirectedEdge(UndirectedEdge&&) noexcept = default;
   UndirectedEdge& operator=(const UndirectedEdge&) = default;
@@ -18,6 +18,9 @@ class UndirectedEdge : public Edge<T> {
 
   bool is_directed() override;
   T get_weight() override;
+
+  const Node<T>* get_first() const;
+  const Node<T>* get_second() const;
  private:
   const Node<T> *first_, *second_;
 };
@@ -36,6 +39,16 @@ bool UndirectedEdge<T>::is_directed() {
 template <typename T>
 T UndirectedEdge<T>::get_weight() {
   return first_->get_distance(*second_);
+}
+
+template <typename T>
+const Node<T>* UndirectedEdge<T>::get_first() const {
+  return first_;
+}
+
+template <typename T>
+const Node<T>* UndirectedEdge<T>::get_second() const {
+  return second_;
 }
 
 }
