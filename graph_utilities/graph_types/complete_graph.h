@@ -1,7 +1,7 @@
 #ifndef MAPS_COMPLETE_GRAPH_H
 #define MAPS_COMPLETE_GRAPH_H
 
-#include "undirected_graph.h"
+#include "../undirected_graph.h"
 
 namespace maps {
 

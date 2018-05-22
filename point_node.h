@@ -1,7 +1,7 @@
 #ifndef MAPS_POINT_NODE_H
 #define MAPS_POINT_NODE_H
 
-#include "node.h"
+#include "graph_utilities/node.h"
 
 namespace maps {
 

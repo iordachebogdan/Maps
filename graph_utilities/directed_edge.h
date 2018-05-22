@@ -18,6 +18,7 @@ class DirectedEdge : public Edge<T> {
 
   bool is_directed() override;
   T get_weight() override;
+  Edge<T>* clone() const override;
 
   const Node<T>* get_from() const;
   const Node<T>* get_to() const;
@@ -39,6 +40,11 @@ bool DirectedEdge<T>::is_directed() {
 template <typename T>
 T DirectedEdge<T>::get_weight() {
   return from_->get_distance(*to_);
+}
+
+template <typename T>
+Edge<T>* DirectedEdge<T>::clone() const {
+  return new DirectedEdge<T>(from_, to_);
 }
 
 template <typename T>

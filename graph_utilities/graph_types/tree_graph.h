@@ -1,7 +1,7 @@
 #ifndef MAPS_TREE_GRAPH_H
 #define MAPS_TREE_GRAPH_H
 
-#include "undirected_graph.h"
+#include "../undirected_graph.h"
 #include <functional>
 
 namespace maps {

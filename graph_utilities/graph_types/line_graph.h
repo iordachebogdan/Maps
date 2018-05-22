@@ -1,7 +1,7 @@
 #ifndef MAPS_LINE_GRAPH_H
 #define MAPS_LINE_GRAPH_H
 
-#include "undirected_graph.h"
+#include "../undirected_graph.h"
 
 namespace maps {
 
@@ -43,6 +43,8 @@ LineGraph<T>::LineGraph(int node_count, const std::vector<EdgePtr> &edges) :
     position_[curr] = i;
     partial_distance_[i] = partial_distance_[i-1]
                            + this->adj_list_[prev][curr_edge]->get_weight();
+    if (i == node_count - 1)
+      break;
     int aux = curr;
     curr = this->adj_list_[aux][0]->get_first()->get_id();
     if (curr == aux)

@@ -18,6 +18,7 @@ class UndirectedEdge : public Edge<T> {
 
   bool is_directed() override;
   T get_weight() override;
+  Edge<T>* clone() const override;
 
   const Node<T>* get_first() const;
   const Node<T>* get_second() const;
@@ -39,6 +40,11 @@ bool UndirectedEdge<T>::is_directed() {
 template <typename T>
 T UndirectedEdge<T>::get_weight() {
   return first_->get_distance(*second_);
+}
+
+template <typename T>
+Edge<T>* UndirectedEdge<T>::clone() const {
+  return new UndirectedEdge<T>(first_, second_);
 }
 
 template <typename T>

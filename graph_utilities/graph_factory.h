@@ -3,12 +3,12 @@
 
 #include "graph.h"
 #include "directed_graph.h"
-#include "complete_graph.h"
+#include "graph_types/complete_graph.h"
 #include "edge.h"
-#include "da_graph.h"
+#include "graph_types/da_graph.h"
 #include <vector>
-#include "tree_graph.h"
-#include "line_graph.h"
+#include "graph_types/tree_graph.h"
+#include "graph_types/line_graph.h"
 
 namespace maps {
 

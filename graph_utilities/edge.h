@@ -15,6 +15,7 @@ class Edge {
 
   virtual bool is_directed() = 0;
   virtual T get_weight() = 0;
+  virtual Edge* clone() const = 0;
 };
 
 }

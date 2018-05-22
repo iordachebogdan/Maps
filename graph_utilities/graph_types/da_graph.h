@@ -1,7 +1,7 @@
 #ifndef MAPS_DAGRAPH_H
 #define MAPS_DAGRAPH_H
 
-#include "directed_graph.h"
+#include "../directed_graph.h"
 #include <functional>
 
 namespace maps {
