@@ -5,6 +5,7 @@
 #include "directed_edge.h"
 #include <vector>
 #include <queue>
+#include "../exceptions/graph_exceptions.h"
 
 namespace maps {
 
@@ -97,7 +98,7 @@ T DirectedGraph<T>::get_distance(int id_source, int id_destination) const {
   }
 
   if (is_inf_distance[id_destination])
-    throw "destination can't be accessed from source";
+    throw error::no_path();
   return distance[id_destination];
 }
 

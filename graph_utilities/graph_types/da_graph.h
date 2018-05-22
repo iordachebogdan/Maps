@@ -3,6 +3,7 @@
 
 #include "../directed_graph.h"
 #include <functional>
+#include "../../exceptions/graph_exceptions.h"
 
 namespace maps {
 
@@ -59,7 +60,7 @@ T DAGraph<T>::get_distance(int id_source, int id_destination) const {
 
     if (curr == id_source) {
       if (is_infinite[curr])
-        throw "destination can't be accessed from source";
+        throw error::no_path();
       return distance[curr];
     }
   }

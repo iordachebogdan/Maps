@@ -128,7 +128,12 @@ void Application::add_street() {
   std::cout << "Enter name of second city:\n";
   getline(std::cin, city2);
 
-  regions_[region]->add_street(city1, city2);
+  try {
+    regions_[region]->add_street(city1, city2);
+  }
+  catch (std::exception& exp) {
+    std::cout << exp.what() << '\n';
+  }
   std::cout << "Street added\n";
 }
 
@@ -146,7 +151,12 @@ void Application::remove_street() {
   std::cout << "Enter name of second city:\n";
   getline(std::cin, city2);
 
-  regions_[region]->remove_street(city1, city2);
+  try {
+    regions_[region]->remove_street(city1, city2);
+  }
+  catch (std::exception& exp) {
+    std::cout << exp.what() << '\n';
+  }
   std::cout << "Street added\n";
 }
 
@@ -164,7 +174,13 @@ void Application::get_distance() {
   std::cout << "Enter name of second city:\n";
   getline(std::cin, city2);
 
-  double res = regions_[region]->get_distance(city1, city2);
+  double res;
+  try {
+    res = regions_[region]->get_distance(city1, city2);
+  }
+  catch (std::exception& exp) {
+    std::cout << exp.what() << '\n';
+  }
   std::cout << "The distance is: " << res << "\n";
 }
 

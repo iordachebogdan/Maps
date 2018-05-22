@@ -7,6 +7,7 @@
 #include <set>
 #include "graph_utilities/proxy_graph.h"
 #include "point_node.h"
+#include "exceptions/maps_exceptions.h"
 
 namespace maps {
 
@@ -98,16 +99,16 @@ template <typename T, typename CostFunction>
 void Region<T, CostFunction>::add_street(const std::string &first,
                                          const std::string &second) {
   if (!cities_ids_.count(first) || !cities_ids_.count(first))
-    throw "One of these cities doesn't exist";
+    throw error::bad_city();
   int id_first = cities_ids_[first];
   int id_second = cities_ids_[second];
   if (id_first == id_second)
-    throw "Can't set a street from a city to itself!";
+    throw error::self_loop();
   if (streets_.find({id_first, id_second}) != streets_.end())
-    throw "There's already a street between these cities.";
+    throw error::duplicate_street();
   if (bidirectional_streets_ &&
       streets_.find({id_second, id_first}) != streets_.end())
-    throw "There's already a street between these cities.";
+    throw error::duplicate_street();
 
   streets_.insert({id_first, id_second});
   if (bidirectional_streets_)
@@ -120,11 +121,11 @@ template <typename T, typename CostFunction>
 void Region<T, CostFunction>::remove_street(const std::string &first,
                                             const std::string &second) {
   if (!cities_ids_.count(first) || !cities_ids_.count(first))
-    throw "One of these cities doesn't exist";
+    throw error::bad_city();
   int id_first = cities_ids_[first];
   int id_second = cities_ids_[second];
   if (streets_.find({id_first, id_second}) == streets_.end())
-    throw "There's no street between these cities";
+    throw error::bad_street();
   streets_.erase({id_first, id_second});
   if (bidirectional_streets_)
     streets_.erase({id_second, id_first});
@@ -136,7 +137,7 @@ template <typename T, typename CostFunction>
 T Region<T, CostFunction>::get_distance(const std::string &first,
                                         const std::string &second) {
   if (!cities_ids_.count(first) || !cities_ids_.count(first))
-    throw "One of these cities doesn't exist";
+    throw error::bad_city();
   int id_first = cities_ids_[first];
   int id_second = cities_ids_[second];
   return graph_.get_distance(id_first, id_second);

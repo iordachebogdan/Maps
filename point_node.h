@@ -2,6 +2,7 @@
 #define MAPS_POINT_NODE_H
 
 #include "graph_utilities/node.h"
+#include "exceptions/maps_exceptions.h"
 
 namespace maps {
 
@@ -38,7 +39,7 @@ template <typename T, typename CostFunction>
 T PointNode<T, CostFunction>::get_distance(const Node<T> &oth) const {
   const PointNode<T, CostFunction>* oth_ptr;
   if (!(oth_ptr = dynamic_cast< const PointNode<T, CostFunction>* >(&oth))) {
-    throw "the nodes between the distance is computed have to be of same type";
+    throw error::incompatible_points();
   }
   return cost_function_(*this, *oth_ptr);
 }

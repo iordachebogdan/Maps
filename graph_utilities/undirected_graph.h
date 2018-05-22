@@ -5,6 +5,7 @@
 #include <vector>
 #include "undirected_edge.h"
 #include <queue>
+#include "../exceptions/graph_exceptions.h"
 
 namespace maps {
 
@@ -100,7 +101,7 @@ T UndirectedGraph<T>::get_distance(int id_source, int id_destination) const {
   }
 
   if (is_inf_distance[id_destination])
-    throw "destination can't be accessed from source";
+    throw error::no_path();
   return distance[id_destination];
 }
 

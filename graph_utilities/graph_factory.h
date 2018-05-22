@@ -9,6 +9,7 @@
 #include <vector>
 #include "graph_types/tree_graph.h"
 #include "graph_types/line_graph.h"
+#include "../exceptions/graph_exceptions.h"
 
 namespace maps {
 
@@ -67,7 +68,7 @@ Graph<T>* GraphFactory<T>::create_graph(int node_count,
   else if (type == Line) {
     return new LineGraph<T>(node_count, edges);
   }
-  throw "nonexisting graph type";
+  throw error::unrecognised_graph_type();
 }
 
 }
