@@ -87,9 +87,9 @@ int TreeGraph<T>::lca(int first, int second) const {
 
   int diff = level_[first] - level_[second];
   for (int i = step; i >= 0; --i) {
-    if (diff < i)
+    if (diff < (1 << i))
       continue;
-    diff -= i;
+    diff -= (1 << i);
     first = ancestors_[i][first];
   }
 

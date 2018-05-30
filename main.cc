@@ -2,7 +2,7 @@
 
 int main() {
 #ifdef TESTING
-  freopen("unit_tests/test1.txt", "r", stdin);
+  freopen("unit_tests/test-path.txt", "r", stdin);
 #endif
 
   maps::Application app;

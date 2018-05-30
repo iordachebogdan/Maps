@@ -93,6 +93,7 @@ Region<T, CostFunction>& Region<T, CostFunction>::operator=(const Region &rhs) {
     else if (!bidirectional_streets_)
       graph_.add_edge(&cities_[it.first], &cities_[it.second]);
   }
+  return *this;
 }
 
 template <typename T, typename CostFunction>

@@ -174,14 +174,15 @@ void Application::get_distance() {
   std::cout << "Enter name of second city:\n";
   getline(std::cin, city2);
 
-  double res;
+  double res = -1;
   try {
     res = regions_[region]->get_distance(city1, city2);
   }
   catch (std::exception& exp) {
     std::cout << exp.what() << '\n';
   }
-  std::cout << "The distance is: " << res << "\n";
+  if (res != -1)
+    std::cout << "The distance is: " << res << "\n";
 }
 
 void Application::list_regions() {
