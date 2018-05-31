@@ -128,13 +128,16 @@ void Application::add_street() {
   std::cout << "Enter name of second city:\n";
   getline(std::cin, city2);
 
+  bool ok = false;
   try {
     regions_[region]->add_street(city1, city2);
+    ok = true;
   }
   catch (std::exception& exp) {
     std::cout << exp.what() << '\n';
   }
-  std::cout << "Street added\n";
+  if (ok)
+    std::cout << "Street added\n";
 }
 
 void Application::remove_street() {
@@ -151,13 +154,16 @@ void Application::remove_street() {
   std::cout << "Enter name of second city:\n";
   getline(std::cin, city2);
 
+  bool ok = false;
   try {
     regions_[region]->remove_street(city1, city2);
+    ok = true;
   }
   catch (std::exception& exp) {
     std::cout << exp.what() << '\n';
   }
-  std::cout << "Street added\n";
+  if (ok)
+    std::cout << "Street removed\n";
 }
 
 void Application::get_distance() {
