@@ -1,5 +1,6 @@
 # Maps
-Console application for finding minimum distances in different types of graphs. With this application you can create multiple street systems between cities in the cartesian plane. Different street networks are called "regions".
+Console application for finding minimum distances in different types of graphs. With this application you can create multiple street networks between cities in the cartesian plane. Different street networks are called "regions".
+
 These graphs (regions) are classified by the application in a number of different types of graphs for which it chooses an optimum approach for finding the minimum distance between two cities.
 The supported types of graphs are:
 - complete graph (undirected streets)
